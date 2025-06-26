@@ -4,7 +4,7 @@ dir="$HOME/.config/rofi"
 dir_screenshot="$HOME/Pictures/Screenshots/"
 theme="screenshot"
 
-host=$(uname -n)
+host=$(hostname)
 
 option_0="󰇄  Capture Desktop"
 option_1="󰹑  Capture Area"
@@ -41,10 +41,14 @@ run_cmd() {
         notify-send -i camera -t 1000 "Delayed screenshot saved" "Location: ${dir_screenshot}"
     elif [[ $1 == '--option_4' ]]; then
         notify-send -i media-record -t 1000 "Recording started" "Saving to Videos folder"
-        sleep 1.2 && wf-recorder -f "$HOME/Videos/recording_$(date +%Y-%m-%d_%H-%M-%S).mp4" -b 5000k -r 30 &
+        sleep 1 && wf-recorder -f "$HOME/Videos/recording_$(date +%Y-%m-%d_%H-%M-%S).mp4" \
+            -c libx264rgb \
+            --audio &
     elif [[ $1 == '--option_5' ]]; then
         notify-send -i media-record -t 1000 "Area recording started" "Saving to Videos folder"
-        sleep 0.3 && wf-recorder -g "$(slurp)" -f "$HOME/Videos/recording_$(date +%Y-%m-%d_%H-%M-%S).mp4" -b 5000k -r 30 &
+        sleep 1 && wf-recorder -g "$(slurp)" -f "$HOME/Videos/recording_$(date +%Y-%m-%d_%H-%M-%S).mp4" \
+            -c libx264rgb \
+            --audio &
     elif [[ $1 == '--option_6' ]]; then
         if pgrep wf-recorder >/dev/null; then
             pkill wf-recorder
